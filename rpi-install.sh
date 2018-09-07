@@ -180,8 +180,35 @@ echo 'Step 5: enable autostart'
 sudo systemctl enable unifi
 sudo systemctl start unifi
 
+# enable log-rotation
+echo 'optional log-rotation'
+echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n] '
+read logrotationdecision
+
+if [[ $wlogrotationdecision =~ (Y|y) ]]
+  then
+sudo apt install logrotate -y
+sudo bash -c 'cat &gt;&gt; /etc/logrotate.d/unifi &lt;&lt; EOF
+/var/log/unifi/*.log {
+    rotate 20
+    daily
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+}
+EOF'
+elif [[ $wificonnectiondecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+else
+    echo 'Invalid imput!'
+fi
+
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
 echo '#UbiquitiEverywhere'
-echo 'reboot the RaspberryPi now with: sudo reboot now'
+echo ''
+echo 'Reboot the RaspberryPi now with: sudo reboot now'
 exit
