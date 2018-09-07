@@ -5,6 +5,7 @@ clear
 echo 'MIT License'
 echo ''
 echo 'Copyright (c) 2018 jacktooandroid'
+echo 'enhanced by steigerbalett for RaspberryPi 2018'
 echo ''
 echo 'Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,12 +37,12 @@ if [[ idinfo -eq 0 ]]
     echo 'You are running as root! :-)'
 else
   echo 'You are not running as root :-('
-  echo This script has to run in SUDO mode to run smoothly!
+  echo 'This script has to run in SUDO mode to run smoothly!'
   exit
 fi
 
 #Wi-Fi connection configuration
-echo Wi-Fi connection Configuration
+echo 'Wi-Fi connection Configuration'
 echo -n 'Do you want to configure your Wi-Fi connection? [Y/n] '
 read wificonnectiondecision
 
@@ -56,16 +57,16 @@ if [[ $wificonnectiondecision =~ (Y|y) ]]
     echo 'Wi-Fi connection configured!'
 elif [[ $wificonnectiondecision =~ (n) ]]
   then
-    echo No modifications was made
-    echo You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.
+    echo 'No modifications was made'
+    echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 else
-    echo Invalid imput!
-    echo You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.
+    echo 'Invalid imput!'
+    echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 fi
 
 #Checking Memory Requirements
 clear
-echo Step 1: Checking minimum system memory requirements...
+echo 'Step 1: Checking minimum system memory requirements...'
 memtotal=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
 swaptotal=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
 echo Your total system memory is $memtotal
@@ -108,10 +109,17 @@ fi
 #Installing Ubiquiti UniFi Controller
 clear
 echo Step 2: Installing Ubiquiti UniFi Controller...
-echo 'deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
-sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg
+sudo apt update && install dirmngr -y
+echo 'deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
+sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg 
 # As the latest raspbian (Raspbian GNU/Linux 9 (stretch)) installed openjdk-9-jdk-headless, unificontroller did not start
-sudo apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get install openjdk-8-jdk-headless unifi haveged -y
+sudo apt update && sudo apt full-upgrade -y && sudo apt install oracle-java8-jdk unifi haveged -y
+# change Java 8 as standard
+sudo update-alternatives --config java
+sudo cp -p /lib/systemd/system/unifi.service /etc/systemd/system
+sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt' /etc/systemd/system/unifi.service
+# check for dependencies
+sudo apt --fix-broken install -y
 
 #Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
 clear
@@ -162,7 +170,18 @@ else
     echo unifi.xmx=1024 | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
+# Disabling MongoDB
+echo 'Step 4: disabling MongoDB'
+sudo service mongodb stop
+sudo service mongodb disable
+
+# Config autostart of the Unifi controller
+echo 'Step 5: enable autostart'
+sudo systemctl enable unifi
+sudo systemctl start unifi
+
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
 echo '#UbiquitiEverywhere'
+echo 'reboot the RaspberryPi now with: sudo reboot now'
 exit
