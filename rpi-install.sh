@@ -185,7 +185,7 @@ echo 'optional log-rotation'
 echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n] '
 read logrotationdecision
 
-if [[ $wlogrotationdecision =~ (Y|y) ]]
+if [[ $logrotationdecision =~ (Y|y) ]]
   then
 sudo apt install logrotate -y
 sudo bash -c 'cat &gt;&gt; /etc/logrotate.d/unifi &lt;&lt; EOF
@@ -199,7 +199,22 @@ sudo bash -c 'cat &gt;&gt; /etc/logrotate.d/unifi &lt;&lt; EOF
     copytruncate
 }
 EOF'
-elif [[ $wificonnectiondecision =~ (n) ]]
+elif [[ $logrotationdecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+else
+    echo 'Invalid imput!'
+fi
+
+# enable additional programs
+echo 'optional programs: fail2ban'
+echo -n 'Do you want to install the optional additional programs [Y/n] '
+read programdecision
+
+if [[ $programdecision =~ (Y|y) ]]
+  then
+sudo apt install fail2ban -y
+elif [[ $programdecision =~ (n) ]]
   then
     echo 'No modifications was made'
 else
