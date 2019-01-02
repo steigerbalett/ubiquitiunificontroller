@@ -227,7 +227,10 @@ echo 'Your Ubiquiti UniFi Controller has been installed & modified to your prefe
 echo 'Share this with others if this script has helped you!'
 echo 'https://raw.githubusercontent.com/steigerbalett/ubiquitiunificontroller/master/rpi-install.sh'
 echo ''
-
+echo ''
+echo -e "\033[1;31mAccess the Raspi-Ubiquiti-Controller at: https://`hostname -I`:8443\033[0m"
+echo ''
+echo ''
 # reboot the raspi
 echo 'Should the the RaspberryPi now reboot directly or do you do this manually later?'
 echo -n 'Do you want to reboot now [Y/n] '
