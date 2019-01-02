@@ -181,7 +181,8 @@ sudo systemctl enable unifi
 sudo systemctl start unifi
 
 # enable log-rotation
-echo 'optional log-rotation'
+echo 'Step 6: enable logrotation'
+echo 'Activating optional log-rotation'
 echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n] '
 read logrotationdecision
 
@@ -207,7 +208,8 @@ else
 fi
 
 # enable additional programs
-echo 'optional programs: fail2ban'
+echo 'Step 7: Optional programs'
+echo 'Installation of optional programs: fail2ban'
 echo -n 'Do you want to install the optional additional programs [Y/n] '
 read programdecision
 
