@@ -223,7 +223,7 @@ fi
 
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
-echo '#UbiquitiEverywhere'
+echo 'https://raw.githubusercontent.com/steigerbalett/ubiquitiunificontroller/master/rpi-install.sh'
 echo ''
 
 # reboot the raspi
@@ -233,6 +233,9 @@ read rebootdecision
 
 if [[ $rebootdecision =~ (Y|y) ]]
   then
+echo ''
+echo 'System will reboot in 3 seconds'
+sleep 3
 sudo shutdown -r now
 elif [[ $rebootdecision =~ (n) ]]
   then
