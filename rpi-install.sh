@@ -60,7 +60,7 @@ elif [[ $wificonnectiondecision =~ (n) ]]
     echo 'No modifications was made'
     echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 else
-    echo 'Invalid imput!'
+    echo 'Invalid input!'
     echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 fi
 
@@ -161,7 +161,7 @@ elif [[ $modifymemoryallocationdecision =~ (n) ]]
     echo unifi.xms=256 | sudo tee -a /usr/lib/unifi/data/system.properties
     echo unifi.xmx=1024 | sudo tee -a /usr/lib/unifi/data/system.properties
 else
-    echo Invalid imput!
+    echo Invalid input!
     echo No modifications was made
     cd /usr/lib/unifi/data
     cat system.properties > /dev/null
@@ -203,7 +203,7 @@ elif [[ $logrotationdecision =~ (n) ]]
   then
     echo 'No modifications was made'
 else
-    echo 'Invalid imput!'
+    echo 'Invalid input!'
 fi
 
 # enable additional programs
@@ -218,12 +218,27 @@ elif [[ $programdecision =~ (n) ]]
   then
     echo 'No modifications was made'
 else
-    echo 'Invalid imput!'
+    echo 'Invalid input!'
 fi
 
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
 echo '#UbiquitiEverywhere'
 echo ''
+
+# reboot the raspi
+echo 'Should the the RaspberryPi now reboot directly or do you do this manually later?'
+echo -n 'Do you want to reboot now [Y/n] '
+read rebootdecision
+
+if [[ $rebootdecision =~ (Y|y) ]]
+  then
+sudo shutdown -r now
+elif [[ $rebootdecision =~ (n) ]]
+  then
+    echo 'Please reboot to activate the changes'
+else
+    echo 'Invalid input!'
+fi
 echo 'Reboot the RaspberryPi now with: sudo reboot now'
 exit
