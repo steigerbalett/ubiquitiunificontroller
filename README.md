@@ -10,6 +10,9 @@ wget https://raw.githubusercontent.com/steigerbalett/ubiquitiunificontroller/mas
 
 sudo bash rpi-install.sh
 
+After installation & reboot you can access your Raspi-Ubiquiti-Controller at port 8443:  	
+https://x.x.x.x:8443
+
 #######
 
 sources:
