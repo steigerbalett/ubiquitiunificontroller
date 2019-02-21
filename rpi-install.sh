@@ -60,7 +60,7 @@ elif [[ $wificonnectiondecision =~ (n) ]]
     echo 'No modifications was made'
     echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 else
-    echo 'Invalid imput!'
+    echo 'Invalid input!'
     echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 fi
 
@@ -182,6 +182,6 @@ sudo systemctl start unifi
 
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
-echo '#UbiquitiEverywhere'
 echo 'reboot the RaspberryPi now with: sudo reboot now'
+echo 'You will reach your UbiquitiController at https://X.X.X.X:8443'
 exit
