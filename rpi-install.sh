@@ -109,9 +109,11 @@ fi
 #Installing Ubiquiti UniFi Controller
 clear
 echo Step 2: Installing Ubiquiti UniFi Controller...
-sudo apt update && install dirmngr -y
-echo 'deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
-sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg 
+sudo apt update && install dirmngr apt-transport-https -y
+#echo 'deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
+echo 'deb http://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
+#sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg
+sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 # As the latest raspbian (Raspbian GNU/Linux 9 (stretch)) installed openjdk-9-jdk-headless, unificontroller did not start
 sudo apt update && sudo apt full-upgrade -y && sudo apt install oracle-java8-jdk unifi haveged -y
 # change Java 8 as standard
