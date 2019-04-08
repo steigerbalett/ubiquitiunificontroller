@@ -41,29 +41,6 @@ else
   exit
 fi
 
-#Wi-Fi connection configuration
-echo 'Wi-Fi connection Configuration'
-echo -n 'Do you want to configure your Wi-Fi connection? [Y/n] '
-read wificonnectiondecision
-
-if [[ $wificonnectiondecision =~ (Y|y) ]]
-  then
-    echo -n 'Your SSID: '
-    read  wifissid
-    echo -n 'Your Password: '
-    read wifipassword
-    wpa_passphrase "$wifissid" "$wifipassword" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
-    wpa_cli -i wlan0 reconfigure
-    echo 'Wi-Fi connection configured!'
-elif [[ $wificonnectiondecision =~ (n) ]]
-  then
-    echo 'No modifications was made'
-    echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
-else
-    echo 'Invalid input!'
-    echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
-fi
-
 #Checking Memory Requirements
 clear
 echo 'Step 1: Checking minimum system memory requirements...'
@@ -104,6 +81,29 @@ if [[ $totalmem -lt 900000 ]]
       fi
 else
   echo 'You have enough memory to meet the requirements! :-)'
+fi
+
+#Wi-Fi connection configuration
+echo 'Wi-Fi connection Configuration'
+echo -n 'Do you want to configure your Wi-Fi connection? [Y/n] '
+read wificonnectiondecision
+
+if [[ $wificonnectiondecision =~ (Y|y) ]]
+  then
+    echo -n 'Your SSID: '
+    read  wifissid
+    echo -n 'Your Password: '
+    read wifipassword
+    wpa_passphrase "$wifissid" "$wifipassword" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf
+    wpa_cli -i wlan0 reconfigure
+    echo 'Wi-Fi connection configured!'
+elif [[ $wificonnectiondecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+    echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
+else
+    echo 'Invalid input!'
+    echo 'You can visit https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md to setup your Wi-Fi connection later.'
 fi
 
 #Installing Ubiquiti UniFi Controller
