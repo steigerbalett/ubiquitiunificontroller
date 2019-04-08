@@ -207,16 +207,37 @@ else
     echo 'Invalid input!'
 fi
 
-# enable additional programs
-echo 'Step 7: Optional programs'
-echo 'Installation of optional programs: fail2ban'
-echo -n 'Do you want to install the optional additional programs [Y/n] '
-read programdecision
+# enable additional admin programs
+echo 'Step 7: Optional Admin program'
+echo 'Installation of optional Raspberry-Config UI: Webmin (recommend)'
+echo -n 'Do you want to install Webmin [Y/n] '
+read webmindecision
 
-if [[ $programdecision =~ (Y|y) ]]
+if [[ $webmindecision =~ (Y|y) ]]
+  then
+echo 'deb https://download.webmin.com/download/repository sarge contrib' | sudo tee /etc/apt/sources.list.d/100-webmin.list
+cd ../root
+wget http://www.webmin.com/jcameron-key.asc
+sudo apt-key add jcameron-key.asc 
+sudo apt update
+sudo apt install webmin -y
+elif [[ $webmindecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+else
+    echo 'Invalid input!'
+fi
+
+# enable additional programs
+echo 'Step 8: Optional program'
+echo 'Installation of optional program: fail2ban'
+echo -n 'Do you want to install fail2ban [Y/n] '
+read fail2bandecision
+
+if [[ $fail2bandecision =~ (Y|y) ]]
   then
 sudo apt install fail2ban -y
-elif [[ $programdecision =~ (n) ]]
+elif [[ $fail2bandecision =~ (n) ]]
   then
     echo 'No modifications was made'
 else
@@ -230,6 +251,8 @@ echo ''
 echo ''
 echo -e "\033[1;31mAccess the Raspi-Ubiquiti-Controller at: https://`hostname -I`:8443\033[0m"
 echo ''
+echo -e "\033[1;31mAccess the Raspi-Config-UI Webmin at: https://`hostname -I`:10000\033[0m"
+echo -e "\033[1;31mwith user: pi and your password (raspberry)\033[0m"
 echo ''
 # reboot the raspi
 echo 'Should the the RaspberryPi now reboot directly or do you do this manually later?'
