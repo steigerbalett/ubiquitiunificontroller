@@ -115,11 +115,11 @@ echo 'deb http://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /
 #sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 # As the latest raspbian (Raspbian GNU/Linux 9 (stretch)) installed openjdk-9-jdk-headless, unificontroller did not start
-sudo apt update && sudo apt full-upgrade -y && sudo apt install oracle-java8-jdk unifi haveged -y
+sudo apt update && sudo apt full-upgrade -y && sudo apt install openjdk-8-jre-headless ca-certificates-java unifi haveged -y
 # change Java 8 as standard
 sudo update-alternatives --config java
 sudo cp -p /lib/systemd/system/unifi.service /etc/systemd/system
-sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt' /etc/systemd/system/unifi.service
+sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/java-8-openjdk-armhf' /etc/systemd/system/unifi.service
 # check for dependencies
 sudo apt --fix-broken install -y
 
@@ -163,7 +163,7 @@ elif [[ $modifymemoryallocationdecision =~ (n) ]]
     echo unifi.xms=256 | sudo tee -a /usr/lib/unifi/data/system.properties
     echo unifi.xmx=1024 | sudo tee -a /usr/lib/unifi/data/system.properties
 else
-    echo Invalid imput!
+    echo Invalid input!
     echo No modifications was made
     cd /usr/lib/unifi/data
     cat system.properties > /dev/null
@@ -182,8 +182,96 @@ echo 'Step 5: enable autostart'
 sudo systemctl enable unifi
 sudo systemctl start unifi
 
+# enable log-rotation
+echo 'Step 6: enable logrotation'
+echo 'Activating optional log-rotation'
+echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n] '
+read logrotationdecision
+
+if [[ $logrotationdecision =~ (Y|y) ]]
+  then
+sudo apt install logrotate -y
+sudo bash -c 'cat &gt;&gt; /etc/logrotate.d/unifi &lt;&lt; EOF
+/var/log/unifi/*.log {
+    rotate 20
+    daily
+    missingok
+    notifempty
+    compress
+    delaycompress
+    copytruncate
+}
+EOF'
+elif [[ $logrotationdecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+else
+    echo 'Invalid input!'
+fi
+
+# enable additional admin programs
+echo 'Step 7: Optional Admin program'
+echo 'Installation of optional Raspberry-Config UI: Webmin (recommend)'
+echo -n 'Do you want to install Webmin [Y/n] '
+read webmindecision
+
+if [[ $webmindecision =~ (Y|y) ]]
+  then
+echo 'deb https://download.webmin.com/download/repository sarge contrib' | sudo tee /etc/apt/sources.list.d/100-webmin.list
+cd ../root
+wget http://www.webmin.com/jcameron-key.asc
+sudo apt-key add jcameron-key.asc 
+sudo apt update
+sudo apt install webmin -y
+elif [[ $webmindecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+else
+    echo 'Invalid input!'
+fi
+
+# enable additional programs
+echo 'Step 8: Optional program'
+echo 'Installation of optional program: fail2ban'
+echo -n 'Do you want to install fail2ban [Y/n] '
+read fail2bandecision
+
+if [[ $fail2bandecision =~ (Y|y) ]]
+  then
+sudo apt install fail2ban -y
+elif [[ $fail2bandecision =~ (n) ]]
+  then
+    echo 'No modifications was made'
+else
+    echo 'Invalid input!'
+fi
+
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
-echo 'reboot the RaspberryPi now with: sudo reboot now'
-echo 'You will reach your UbiquitiController at https://X.X.X.X:8443'
+echo 'https://raw.githubusercontent.com/steigerbalett/ubiquitiunificontroller/master/rpi-install.sh'
+echo ''
+echo ''
+echo -e "\033[1;31mAccess the Raspi-Ubiquiti-Controller at: https://`hostname -I`:8443\033[0m"
+echo ''
+echo -e "\033[1;31mAccess the Raspi-Config-UI Webmin at: https://`hostname -I`:10000\033[0m"
+echo -e "\033[1;31mwith user: pi and your password (raspberry)\033[0m"
+echo ''
+# reboot the raspi
+echo 'Should the the RaspberryPi now reboot directly or do you do this manually later?'
+echo -n 'Do you want to reboot now [Y/n] '
+read rebootdecision
+
+if [[ $rebootdecision =~ (Y|y) ]]
+  then
+echo ''
+echo 'System will reboot in 3 seconds'
+sleep 3
+sudo shutdown -r now
+elif [[ $rebootdecision =~ (n) ]]
+  then
+    echo 'Please reboot to activate the changes'
+else
+    echo 'Invalid input!'
+fi
+echo 'Reboot the RaspberryPi now with: sudo reboot now'
 exit
