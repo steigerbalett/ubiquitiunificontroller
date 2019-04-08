@@ -26,6 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
+echo ''
+echo -e "\033[1;31mVERSION: 2019-04-08\033[0m"
 sleep 3
 
 #Prerequisites
