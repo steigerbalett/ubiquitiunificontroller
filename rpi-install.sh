@@ -113,11 +113,11 @@ sudo apt update && install dirmngr -y
 echo 'deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/100-ubnt-unifi.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg 
 # As the latest raspbian (Raspbian GNU/Linux 9 (stretch)) installed openjdk-9-jdk-headless, unificontroller did not start
-sudo apt update && sudo apt full-upgrade -y && sudo apt install oracle-java8-jdk unifi haveged -y
+sudo apt update && sudo apt full-upgrade -y && sudo apt install openjdk-8-jre-headless ca-certificates-java unifi haveged -y
 # change Java 8 as standard
 sudo update-alternatives --config java
 sudo cp -p /lib/systemd/system/unifi.service /etc/systemd/system
-sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt' /etc/systemd/system/unifi.service
+sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/java-8-openjdk-armhf' /etc/systemd/system/unifi.service
 # check for dependencies
 sudo apt --fix-broken install -y
 
