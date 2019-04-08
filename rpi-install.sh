@@ -117,7 +117,7 @@ sudo apt update && sudo apt full-upgrade -y && sudo apt install oracle-java8-jdk
 # change Java 8 as standard
 sudo update-alternatives --config java
 sudo cp -p /lib/systemd/system/unifi.service /etc/systemd/system
-sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/jdk-8-oracle-arm32-vfp-hflt' /etc/systemd/system/unifi.service
+sudo sed -i '/^\[Service\]$/a Environment=JAVA_HOME=/usr/lib/jvm/java-8-oracle' /etc/systemd/system/unifi.service
 # check for dependencies
 sudo apt --fix-broken install -y
 
