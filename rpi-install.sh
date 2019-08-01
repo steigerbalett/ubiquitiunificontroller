@@ -25,6 +25,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.'
 echo ''
+echo -e "\033[1;31mVERSION: 2019-08-01\033[0m"
+echo ''
 echo 'Installation will continue in 3 seconds...'
 sleep 3
 
@@ -41,8 +43,46 @@ else
   exit
 fi
 
+#RaspberryPi Tweaks
+echo ""
+echo "========================"
+echo "RaspberryPi Tweaks"
+echo "========================"
+echo ""
+if grep hdmi_blanking=1 /boot/config.txt; then
+  echo "HDMI tweak already set"
+else
+echo "Turn off HDMI without connected Monitor"
+echo "========================"
+echo "" >> /boot/config.txt
+echo "# Turn off HDMI without connected Monitor" >> /boot/config.txt
+echo "hdmi_blanking=1" >> /boot/config.txt
+echo "" >> /boot/config.txt
+echo "# disable HDMI audio" >> /boot/config.txt
+echo "hdmi_drive=1" >> /boot/config.txt
+fi
+echo ""
+echo "" >> /boot/config.txt
+echo "# disable the splash screen" >> /boot/config.txt
+echo "disable_splash=1" >> /boot/config.txt
+echo "" >> /boot/config.txt
+echo "# disable overscan" >> /boot/config.txt
+echo "disable_overscan=1" >> /boot/config.txt
+echo ""
+echo "Enable Hardware watchdog"
+echo "========================"
+echo "" >> /boot/config.txt
+echo "# activating the hardware watchdog" >> /boot/config.txt
+echo "dtparam=watchdog=on" >> /boot/config.txt
+echo ""
+echo "Disable search for SD after USB boot"
+echo "========================"
+echo "" >> /boot/config.txt
+echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
+echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
+
 #Checking Memory Requirements
-clear
+echo ""
 echo 'Step 1: Checking minimum system memory requirements...'
 memtotal=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
 swaptotal=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
@@ -84,6 +124,7 @@ else
 fi
 
 #Wi-Fi connection configuration
+echo ""
 echo 'Wi-Fi connection Configuration'
 echo -n 'Do you want to configure your Wi-Fi connection? [Y/n] '
 read wificonnectiondecision
@@ -173,16 +214,19 @@ else
 fi
 
 # Disabling MongoDB
+echo ""
 echo 'Step 4: disabling MongoDB'
 sudo service mongodb stop
 sudo service mongodb disable
 
 # Config autostart of the Unifi controller
+echo ""
 echo 'Step 5: enable autostart'
 sudo systemctl enable unifi
 sudo systemctl start unifi
 
 # enable log-rotation
+echo ""
 echo 'Step 6: enable logrotation'
 echo 'Activating optional log-rotation'
 echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n] '
