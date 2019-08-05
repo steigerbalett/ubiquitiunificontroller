@@ -1,5 +1,5 @@
 # ubiquitiunificontroller
-Ubiquiti UniFi Controller install script for RapspberryPi (with Raspian 9 lite)
+Ubiquiti UniFi Controller install script for RapspberryPi (with Raspbian Buster lite)
 install:
 
 ######
