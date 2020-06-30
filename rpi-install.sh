@@ -25,11 +25,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.'
 echo ''
-echo -e "\033[1;31mVERSION: 2019-08-01\033[0m"
+echo -e "\033[1;31mVERSION: 2020-06-30\033[0m"
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2019-04-08\033[0m"
 sleep 3
 
 #Prerequisites
