@@ -81,6 +81,16 @@ echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
 
+# add NTP updateadress
+ntpdate -u de.pool.ntp.org
+
+# Einstellen der Zeitzone und Zeitsynchronisierung per Internet: Berlin
+sudo timedatectl set-timezone Europe/Berlin
+sudo timedatectl set-ntp true
+
+# Hostname setzen
+sudo hostnamectl set-hostname unifipi
+
 #Checking Memory Requirements
 echo ""
 echo 'Step 1: Checking minimum system memory requirements...'
