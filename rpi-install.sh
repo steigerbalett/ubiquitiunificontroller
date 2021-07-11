@@ -81,6 +81,27 @@ echo "========================"
 echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
+echo ""
+echo ""
+# SSH
+echo 'SSH connection'
+echo "========================"
+echo 'SSH service is not running by default, you have to enable it'
+echo -n 'Do you want to activate SSH permanently [Y/n] '
+read disablesshdecision
+
+if [[ $disablesshdecision =~ (Y|y) ]]
+  then
+sudo systemctl enable ssh.service
+sudo systemctl start ssh.service
+elif [[ $disablesshdecision =~ (n) ]]
+  then
+sudo systemctl stop ssh.service
+sudo systemctl disable ssh.service
+sudo rm /boot/ssh
+else
+    echo 'Invalid input!'
+fi
 
 #Checking Memory Requirements
 echo ""
